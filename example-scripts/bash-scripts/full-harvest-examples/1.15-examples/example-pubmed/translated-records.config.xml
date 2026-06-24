@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2010-2011 VIVO Harvester Team. For full list of contributors, please see the AUTHORS file provided.
+  All rights reserved.
+  This program and the accompanying materials are made available under the terms of the new BSD license which accompanies this distribution, and is available at http://www.opensource.org/licenses/bsd-license.html
+-->
+<RecordHandler>
+<!--
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+<%	===== Record Sets =====																								%>
+<%	rhClass - The class for the handler for this record set																%>
+<%		Example Values:																									%>
+<%			<Param name="rhClass">org.vivoweb.harvester.util.repo.TextFileRecordHandler</Param>							%>
+<%			 - to store each record as a file in a folder (specified by fileDir). NOTE: performance with				%>
+<%				TextFileRecordHandler is quite poor, but is the suggested while building and testing your				%>
+<%				script. Once the script works, switch to using a higher performance recordhandler like					%>
+<%				JDBCRecordHandler (in an h2 database) or JenaRecordHandler (in a tdb model).							%>
+<%			<Param name="rhClass">org.vivoweb.harvester.util.repo.JDBCRecordHandler</Param>								%>
+<%			 - to store each record in a table in a relational database (specified with dbClass, dbUrl, dbUser,			%>
+<%				dbPass, dbTable, and dataFieldName)																		%>
+<%			<Param name="rhClass">org.vivoweb.harvester.util.repo.JenaRecordHandler</Param>								%>
+<%			 - to store each record in a jena triple store (specified with dataFieldType, jenaConfig, and/or			%>
+<%				all the parameters for a jena model (see below)															%>
+<%																														%>
+<%	===== TextFileRecordHandler Parameters =====																		%>
+<%	fileDir - the directory in which to store the files for each record													%>
+<%		Example Values:																									%>
+<%			<Param name="fileDir">/absolute/path/to/dir</Param> - An absolute path to a directory on linux/unix/macosx	%>
+<%				operating systems																						%>
+<%			<Param name="fileDir">C:/absolute/path/to/dir</Param> - An absolute path to a directory on a windows		%>
+<%				operating system																						%>
+<%			<Param name="fileDir">relative/path/to/dir</Param> - A path to a directory that is relative to the folder	%>
+<%				the shell was in when this command was executed															%>
+<%																														%>
+<%	===== JDBCRecordHandler Parameters =====																			%>
+<%	dbClass - the JDBC driver class to use																				%>
+<%		Example Values:																									%>
+<%			<Param name="dbClass">com.mysql.jdbc.Driver</Param> - for a mysql database									%>
+<%			<Param name="dbClass">org.h2.Driver</Param> - for an h2 database											%>
+<%	===																													%>
+<%																														%>
+<%	dbUrl - the JDBC connection url																						%>
+<%		Example Values:																									%>
+<%			<Param name="dbUrl">jdbc:mysql://127.0.0.1:3306/dbName</Param> - for a mysql database.						%>
+<%				See http://dev.mysql.com/doc/refman/5.6/en/connector-j-reference-configuration-properties.html			%>
+<%			<Param name="dbUrl">jdbc:h2:path/to/h2/store</Param> - for an h2 database.									%>
+<%				See http://www.h2database.com/html/features.html#database_url											%>
+<%	===																													%>
+<%																														%>
+<%	dbUser - the DB username to use																						%>
+<%		Example Values:																									%>
+<%			<Param name="dbUser">sa</Param> - used for h2 database (the default h2 system admin login					%>
+<%			<Param name="dbUser">myUser</Param>																			%>
+<%	===																													%>
+<%																														%>
+<%	dbPass - the DB password to use																						%>
+<%		Example Values:																									%>
+<%			<Param name="dbPass"></Param> - used for h2 database (the default h2 system admin login						%>
+<%			<Param name="dbPass">myPass</Param>																			%>
+<%	===																													%>
+<%																														%>
+<%	dbTable - (optional) the name of the table to store data in, if non-existent will be created						%>
+<%		Example Values:																									%>
+<%			(default) <Param name="dbTable">recordTable</Param>															%>
+<%			<Param name="dbTable">myTableName</Param>																	%>
+<%	===																													%>
+<%																														%>
+<%	dataFieldName - (optional) the name of the field to use, if table is non-existent will be created with table		%>
+<%		Example Values:																									%>
+<%			(default) <Param name="dataFieldName">dataField</Param>														%>
+<%			<Param name="dataFieldName">myDataFieldName</Param>															%>
+<%																														%>
+<%	===== JenaRecordHandler Parameters =====																			%>
+<%	dataFieldType - (optional) the predicate to use for storing data properties											%>
+<%		Example Values:																									%>
+<%			(default) <Param name="dataFieldType">http://vivoweb.org/harvester/rh#dataFieldType</Param>					%>
+<%			<Param name="dataFieldType">http://yourmom.com/propbase#myProp</Param>										%>
+<%	===																													%>
+<%																														%>
+<%	jenaConfig - (optional - at least one of this and/or full set of params defining a model as described in Models		%>
+<%			section below) the configuration file that describes the model in which to store data. The parameters for	%>
+<%			this config file are described in the Models section below.													%>
+<%		Example Values:																									%>
+<%			<Param name="jenaConfig">/absolute/path/to/jena-model.config.xml</Param> - An absolute path					%>
+<%				to a directory on linux/unix/macosx operating systems													%>
+<%			<Param name="jenaConfig">C:/absolute/path/to/jena-model.config.xml</Param> - An absolute					%>
+<%				path to a directory on a windows operating system														%>
+<%			<Param name="jenaConfig">relative/path/to/jena-model.config.xml</Param> - A path to a						%>
+<%				directory that is relative to the folder the shell was in when this command was executed				%>
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+-->
+<!--
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+<%	Sample TextFileRecordHandler																						%>
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+-->
+<!--
+	<Param name="rhClass">org.vivoweb.harvester.util.repo.TextFileRecordHandler</Param>
+	<Param name="fileDir">data/tf-rh</Param>
+-->
+<!--
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+<%	Sample JDBCRecordHandler - using h2 database and default dbTable and dataFieldName									%>
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+-->
+<!--
+	<Param name="rhClass">org.vivoweb.harvester.util.repo.JDBCRecordHandler</Param>
+	<Param name="dbClass">org.h2.Driver</Param>
+	<Param name="dbUrl">jdbc:h2:data/h2-jdbc-rh/store</Param>
+	<Param name="dbUser">sa</Param>
+	<Param name="dbPass"></Param>
+-->
+<!--
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+<%	Sample JDBCRecordHandler - using mysql database and custom dbTable and dataFieldName								%>
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+-->
+<!--
+	<Param name="rhClass">org.vivoweb.harvester.util.repo.JDBCRecordHandler</Param>
+	<Param name="dbClass">com.mysql.jdbc.Driver</Param>
+	<Param name="dbUrl">jdbc:mysql://127.0.0.1:3306/dbName</Param>
+	<Param name="dbUser">myUser</Param>
+	<Param name="dbPass">myPass</Param>
+	<Param name="dbTable">myTableName</Param>
+	<Param name="dataFieldName">myDataFieldName</Param>
+-->
+<!--
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+<%	Sample JenaRecordHandler - just base params																			%>
+<%		(using inline model configs as below the Models section or config file as defined below)						%>
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+-->
+<!--
+	<Param name="rhClass">org.vivoweb.harvester.util.repo.JenaRecordHandler</Param>
+	<Param name="dataFieldType">http://yourmom.com/propbase#myProp</Param>
+-->
+<!--
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+<%	Sample JenaRecordHandler - using an external model config file														%>
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+-->
+<!--
+	<Param name="jenaConfig">jena-model.conf.xml</Param>
+-->
+<!--
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+<%	===== Models ===== 																									%>
+<%	type - defines which type of jena model																				%>
+<%		Possible Values:																								%>
+<%			<Param name="type">tdb</Param> - defines a tdb jena model													%>
+<%			<Param name="type">sdb</Param> - defines an sdb jena model													%>
+<%			<Param name="type">rdb</Param> - defines an rdb jena model													%>
+<%			<Param name="type">file</Param> - defines an rdf file to use as a model										%>
+<%																														%>
+<%	===== Model Parameters ===== 																						%>
+<%	checkEmpty - (optional) check if the model is empty and log a warning if it is										%>
+<%		Possible Values:																								%>
+<%			(default) <Param name="checkEmpty">false</Param> - don't check and don't log a message						%>
+<%			<Param name="checkEmpty">true</Param> - check if empty and log a warn log message if empty					%>
+<%	=== 																												%>
+<%																														%>
+<%	dbDir - the directory to store a tdb model in 																		%>
+<%			(only needed when type is tdb)	 																			%>
+<%		Example Values:																									%>
+<%			<Param name="dbDir">/absolute/path/to/dir</Param> - An absolute path to a directory on						%>
+<%				linux/unix/macosx operating systems																		%>
+<%			<Param name="dbDir">C:/absolute/path/to/dir</Param> - An absolute path to a directory on					%>
+<%				a windows operating system																				%>
+<%			<Param name="dbDir">relative/path/to/dir</Param> - A path to a directory that is relative					%>
+<%				to the folder the shell was in when this command was executed											%>
+<%	=== 																												%>
+<%																														%>
+<%	file - the path to the file that contains rdf data 																	%>
+<%			(only needed when type is file) 																			%>
+<%		Example Values:																									%>
+<%			<Param name="file">/absolute/path/to/rdf-data.rdf.xml</Param> - An absolute path to an rdf					%>
+<%				file on linux/unix/macosx operating systems																%>
+<%			<Param name="file">C:/absolute/path/to/rdf-data.n3</Param> - An absolute path to an rdf						%>
+<%				file on a windows operating system																		%>
+<%			<Param name="file">relative/path/to/rdf-data.ttl</Param> - A path to an rdf file that is					%>
+<%				relative to the folder the shell was in when this command was executed									%>
+<%	=== 																												%>
+<%																														%>
+<%	rdfLang - the format of the rdf in the file																			%>
+<%			(optional, only used when type is file) 																	%>
+<%		Possible Values:																								%>
+<%			(default) <Param name="rdfLang">RDF/XML</Param> - rdf/xml format											%>
+<%			<Param name="rdfLang">N3</Param> - n3 format																%>
+<%			<Param name="rdfLang">TTL</Param> - turtle/ttl format														%>
+<%			<Param name="rdfLang">N-TRIPLE</Param> - n-triple format													%>
+<%	=== 																												%>
+<%																														%>
+<%	dbLayout - the layout to use for an sdb model 																		%>
+<%			(optional, only used when type is sdb) 																		%>
+<%		Possible Values:																								%>
+<%			(default) <Param name="dbLayout">layout2</Param> - layout2													%>
+<%	=== 																												%>
+<%																														%>
+<%	dbType - the name of the database type (as specified by jena) 														%>
+<%			(only needed when type is rdb or sdb)																		%>
+<%		Examples: 																										%>
+<%			<Param name="dbType">MySQL</Param> - mysql database															%>
+<%			<Param name="dbType">H2</Param> - h2 database																%>
+<%	=== 																												%>
+<%																														%>
+<%	dbClass - the JDBC driver class to use 																				%>
+<%			(only needed when type is rdb or sdb)																		%>
+<%		Examples: 																										%>
+<%			<Param name="dbClass">com.mysql.jdbc.Driver</Param> - mysql database										%>
+<%			<Param name="dbClass">org.h2.Driver</Param> - h2 database													%>
+<%	=== 																												%>
+<%																														%>
+<%	dbUrl - the JDBC connection url 																					%>
+<%			(only needed when type is rdb or sdb)																		%>
+<%		Examples: 																										%>
+<%			<Param name="dbUrl">jdbc:mysql://127.0.0.1:3306/dbName</Param> - mysql database								%>
+<%				see http://dev.mysql.com/doc/refman/5.6/en/connector-j-reference-configuration-properties.html			%>
+<%			<Param name="dbUrl">jdbc:h2:path/to/h2/store</Param> - h2 database											%>
+<%				see http://www.h2database.com/html/features.html#database_url											%>
+<%	=== 																												%>
+<%																														%>
+<%	modelName - the named model to use																					%>
+<%			(optional, uses default model if not specified, only used when type is rdb, tdb, or sdb )					%>
+<%		Examples: 																										%>
+<%			<Param name="modelName">http://vitro.mannlib.cornell.edu/default/vitro-kb-2</Param>							%>
+<%			<Param name="modelName">mySimpleModelName</Param>															%>
+<%			<Param name="modelName">http://vivo.localinstitution.edu/models/my-uri-model</Param>						%>
+<%	=== 																												%>
+<%																														%>
+<%	dbUser - the DB username to use 																					%>
+<%			(only needed when type is rdb or sdb)																		%>
+<%		Example: 																										%>
+<%			<Param name="dbUser">sa</Param> - used for h2 database (the default h2 system admin login					%>
+<%			<Param name="dbUser">myUser</Param>																			%>
+<%	=== 																												%>
+<%																														%>
+<%	dbPass - the DB password to use 																					%>
+<%			(only needed when type is rdb or sdb)																		%>
+<%		Example: 																										%>
+<%			<Param name="dbPass"></Param> - used for h2 database (the default h2 system admin login						%>
+<%			<Param name="dbPass">myPass</Param>																			%>
+<%																														%>
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+-->
+<!--
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+<%	Sample JenaRecordHandler - using an internally defined tdb model													%>
+<%		(using rhClass and dataFieldType as defined above the Models section)											%>
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+-->
+<!--
+	<Param name="type">tdb</Param>
+	<Param name="dbDir">data/tdb-jena</Param>
+-->
+<!--
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+<%	Sample JenaRecordHandler - using an internally defined file model													%>
+<%		(using rhClass and dataFieldType as defined above the Models section)											%>
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+-->
+<!--
+	<Param name="type">file</Param>
+	<Param name="file">data/file-jena.rdf.n3</Param>
+	<Param name="rdfLang">N3</Param>
+-->
+<!--
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+<%	Sample JenaRecordHandler - using an internally defined rdb model													%>
+<%		(using rhClass and dataFieldType as defined above the Models section)											%>
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+-->
+<!--
+	<Param name="type">rdb</Param>
+	<Param name="dbType">H2</Param>
+	<Param name="dbClass">org.h2.Driver</Param>
+	<Param name="dbUrl">jdbc:h2:data/jena-model/store</Param>
+	<Param name="modelName">mySimpleModelName</Param>
+	<Param name="dbUser">sa</Param>
+	<Param name="dbPass"></Param>
+-->
+<!--
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+<%	Sample JenaRecordHandler - using an internally defined sdb model													%>
+<%		(using rhClass and dataFieldType as defined above the Models section)											%>
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+-->
+<!--
+	<Param name="type">sdb</Param>
+	<Param name="dbLayout">layout2</Param>
+	<Param name="dbType">H2</Param>
+	<Param name="dbClass">org.h2.Driver</Param>
+	<Param name="dbUrl">jdbc:h2:data/jena-model/store</Param>
+	<Param name="modelName">mySimpleModelName</Param>
+	<Param name="dbUser">sa</Param>
+	<Param name="dbPass"></Param>
+-->
+	<Param name="rhClass">org.vivoweb.harvester.util.repo.TextFileRecordHandler</Param>
+	<!-- <Param name="type">tdb</Param> -->
+	<Param name="fileDir">data/translated-records</Param>
+</RecordHandler>

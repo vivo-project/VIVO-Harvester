@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2010-2011 VIVO Harvester Team. For full list of contributors, please see the AUTHORS file provided.
+  All rights reserved.
+  This program and the accompanying materials are made available under the terms of the new BSD license which accompanies this distribution, and is available at http://www.opensource.org/licenses/bsd-license.html
+-->
+<!--
+<%  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  %>
+<%    The diff tool is used to compare jena models and produce a result model which is the first model (minuend)      %>
+<%       with any matching statements in the second model (subtrahend) removed from it.                               %>
+<%    =====                                                                                                           %>
+<%    This tool produces the graph-math difference of the triples between two models. It produces a model with the    %>
+<%       triples which are in the minuend and not in the subtrahend.                                                  %>
+<%    Expressed mathematically as minuend - subtrahend = difference                                                   %>
+<%    Neither the minend nor the subtrahend are altered.                                                              %>
+<%  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  %>
+-->
+<Task>
+	<!--INPUT -->
+	<!--MINUEND : for more information please see the given config file -->
+<!-- 
+<%  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  %>
+<%  <Param name="minuend"> The model described by this config file is the model which has the data which will be in   %>
+<%     output model.                                                                                                  %>
+<%                                                                                                                    %>
+<%                                                                                                                    %>
+<%  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  %>
+-->
+	<Param name="minuend">previous-harvest.model.xml</Param>
+
+	<!--VIVO -->
+	    <!--SUBTRAHEND : for more information please see the given config file -->
+<!-- 
+<%  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  %>
+<%  <Param name="subtrahend"> The model described by this config file contains the triples which are not goning to    %>
+<%     be within the output model. If the triples match any within the minuend model then the output will be smaller  %>
+<%     than the minuend.                                                                                              %>
+<%  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  %>
+-->
+	<Param name="subtrahend">harvested-data.model.xml</Param>
+
+	<!-- OPTIONS -->
+	    <!--DUMPFILE -->
+<!-- 
+<%  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  %>
+<%  <Param name="dumptofile"> This denotes the place for a text dump file to be produced. The default format of the   %>
+<%  dumpfile is RDF/XML and is able to be added or removed from another model through the use of the transfer tool.   %>
+<%  <Param name="dumptolanguage"> This denotes the language the rdf is in. Predefined values for lang are "RDF/XML",  %>
+<%  "N-TRIPLE", "TURTLE" (or "TTL") and "N3". * null represents the default language, "RDF/XML". "RDF/XML-ABBREV" is  %>
+<%  a synonym for "RDF/XML".					  																	  %>
+<%  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  %>
+-->
+	<Param name="dumptofile">xmlrdf=data/vivo-subtractions.rdf.xml</Param>
+	<Param name="dumptofile">ntriple=data/vivo-ntriple-subtractions.xml</Param>
+	<Param name="dumptolanguage">ntriple=N-TRIPLE</Param>
+	
+	<!--OUTPUT : for more information please see the given config file -->
+<!-- 
+<%  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  %>
+<%  <Param name="output"> The model described by this config file is the model that will be produced which will       %>
+<%     contain the data which is in the minuend but not in the subtrahend.                                            %>
+<%                                                                                                                    %>
+<%  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  %>
+-->
+    
+<!--     <Param name="output">diff-output.model.xml</Param> -->
+
+<!-- 
+<%  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  %>
+<%  <Param name="selective-diff"> Tells Diff to use the selectiveDiff method in execute. If any "update-types"	      %>
+<%  parameters (below) are set, this flag is implicitly set. This flag exists mostly for the case where one wishes    %>
+<%  to use selectiveDiff without specifying update types.                       				      %>
+<%  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  %>
+-->
+	
+<!--     <Param name="selective-diff">T</Param> -->
+
+<!-- 
+<%  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  %>
+<%  <Param name="update-types"> Each update-types entry specifies a type allowed to be updated in the process of      %>
+<%     a diff, meant primarily for creating subtraction models. Untested for addition models!		      	      %>
+<%														      %>
+<%     Specifying any type at all will cause Diff to use the selectiveDiff() method, leading to unspecified types     %>
+<%     being preserved.                                  							      %>
+<%  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  %>
+-->
+    
+	<!-- <Param name="update-types">http://xmlns.com/foaf/0.1/Person</Param> -->
+        <Param name="wordiness">INFO</Param> 
+</Task>

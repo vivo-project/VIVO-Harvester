@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2010-2011 VIVO Harvester Team. For full list of contributors, please see the AUTHORS file provided.
+  All rights reserved.
+  This program and the accompanying materials are made available under the terms of the new BSD license which accompanies this distribution, and is available at http://www.opensource.org/licenses/bsd-license.html
+-->
+<!--
+<%                                                                                                                    %>
+<%  displayResultFormat - Since RDF can be expressed in several different format, this parameter is where the format  %>
+<%          is specified.                                                                                             %>
+<%          RS_XML RS_TEXT CSV RS_JSON RS_RDF  - for select                                                           %>
+<%          RDF/XML RDF/XML-ABBREV N3 N-TRIPLE TTL - for construct and describe                                       %>
+<%          <param name="queryResultFormat">RDF/XML</param>                                                           %>
+<%                                                                                                                    %>
+<%  outputfile - This specifies the output file for the results of the query. If it isn't specified then it is sent   %>
+<%          to the command line output.                                                                               %>
+<%          <param name="fileOutput">path/Filename</param>                                                            %>
+<%                                                                                                                    %>
+<%  dataset - This flag signals that the query should be done against the data set and not the model.                 %>
+<%          <param name="dataset">true</param>                                                                        %>
+<%                                                                                                                    %>
+
+-->
+<Config>
+    <Param name="wordiness">INFO</Param>
+    <Param name="jena">harvested-data.model.xml</Param>
+    <Param name="query">select ?s ?p ?o where { ?s ?p ?o }</Param>
+    <Param name="queryResultFormat">RS_RDF</Param>
+    <Param name="fileOutput">harvested-dump.rdf</Param>
+</Config>

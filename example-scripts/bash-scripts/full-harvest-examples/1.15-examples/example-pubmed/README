@@ -1,0 +1,26 @@
+
+You need to modify certains files to ingest data using this example.
+
+Here are the files that need to be modified:
+
+1. vivo.model.xml
+
+check that the database information is configured correctly for your system.  By default, it will
+connect to a database called vitrodb_test on localhost
+
+2. run-pubmed.sh
+
+set to the directory where the harvester was installed
+HARVESTER_INSTALL_DIR
+(Note: there may be other shell scripts which have a set HARVESTER_INSTALL_DIR which
+will need to modified)
+
+3. pubmedfetch.config.xml
+
+change the search string (termSerch), email address, numRecords, and batchSize to suit your preferences
+
+5. all the changenamespace-*.config.xml files
+
+change the "newNamespace" value to the namespace of your VIVO instance
+
+CAVEAT: After the ingest is complete you will need to log onto the vivo instance ro rebuild the index and recompute inferences.

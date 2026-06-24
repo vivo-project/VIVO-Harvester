@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2010-2011 VIVO Harvester Team. For full list of contributors, please see the AUTHORS file provided.
+  All rights reserved.
+  This program and the accompanying materials are made available under the terms of the new BSD license which accompanies this distribution, and is available at http://www.opensource.org/licenses/bsd-license.html
+-->
+<Task >
+   <Param name="wordiness">DEBUG</Param>
+   <Param name="email">jaf30@cornell.edu</Param>
+   <Param name="termSearch">0000-0002-1825-0097[Author Identifier]</Param>
+   <Param name="numRecords">100</Param>
+   <Param name="batchSize">100</Param>
+   <Param name="output">raw-records.config.xml</Param>
+</Task>

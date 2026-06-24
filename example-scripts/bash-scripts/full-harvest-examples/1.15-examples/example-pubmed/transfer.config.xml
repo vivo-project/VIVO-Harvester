@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2010-2011 VIVO Harvester Team. For full list of contributors, please see the AUTHORS file provided.
+  All rights reserved.
+  This program and the accompanying materials are made available under the terms of the new BSD license which accompanies this distribution, and is available at http://www.opensource.org/licenses/bsd-license.html
+-->
+<Task>
+    <!-- 
+    wordiness - how much should be displayed on the console when the fetch is run.  Options range from nothing at all to errors only to general
+    information to more detailed debugging information.
+    -
+    Allowable values:
+    OFF - No log information is displayed on the console.
+    ERROR - All error messages are displayed. 
+    WARN - Error and warning messages are displayed.
+    INFO - Errors, warnings, and general user information is displayed.  This is the default.
+    DEBUG - Errors, warnings, general information, and information intended for debuggers is displayed to the console.
+    TRACE - All of the above as well as even finer-grain debugging information is displayed.
+    ALL - Everything that goes into the log is displayed on the console.
+
+    Values meaningful for Transfer:
+    ERROR - All runtime errors
+    DEBUG - Warning if no output is specified
+    -->
+    <Param name="wordiness">INFO</Param>
+
+    <!-- 
+    recordHandler - relative path to the configuration file of the record handler from which we are drawing our input
+    -->
+    <Param name="recordHandler">translated-records.config.xml</Param>
+
+    <!-- 
+    output - relative path to the configuration file for the Jena model to output triples to (or to remove triples from).
+    -->
+    <Param name="output">harvested-data.model.xml</Param>
+    <Param name="dumptofile">data/harvested-data/imported-records.rdf.xml</Param>
+    <Param name="wordiness">INFO</Param>    
+</Task>
