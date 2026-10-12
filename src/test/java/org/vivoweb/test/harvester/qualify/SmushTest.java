@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.vivoweb.harvester.qualify.Smush;
 import org.vivoweb.harvester.util.InitLog;
 import org.vivoweb.harvester.util.repo.JenaConnect;
+import org.vivoweb.harvester.util.repo.MemJenaConnect;
 //import org.vivoweb.harvester.util.repo.RDBJenaConnect;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Resource;
@@ -36,7 +37,7 @@ public class SmushTest extends TestCase {
 	//private JenaConnect outputModel;
 	/** */
 	private String namespace;
-	
+	 
 	/**
 	 * @throws Exception passing along excpetions
 	 */
@@ -44,6 +45,7 @@ public class SmushTest extends TestCase {
 	public void setUp() throws Exception {
 		InitLog.initLogger(null, null);
 		this.namespace = "http://vivo.test.edu/individual/";
+		this.inputModel = new MemJenaConnect();
 //		this.outputModel = new SDBJenaConnect("jdbc:h2:mem:testSmushoutput", "sa", "", "H2", "org.h2.Driver", "layout2", "testSmushoutput");
 		//this.inputModel = new RDBJenaConnect("jdbc:h2:mem:testSmushinput;MODE=HSQLDB", "sa", "", "HSQLDB", "org.h2.Driver", "testSmushinput");
 		String testData = "" +
