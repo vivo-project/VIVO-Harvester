@@ -1,0 +1,33 @@
+name: Build
+
+on: [ push, pull_request, workflow_dispatch ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      MAVEN_OPTS: -Xmx1024M
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: VIVO-Harvester
+
+      - name: Maven Cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-cache-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-cache-m2-
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+
+      - name: Maven Build
+        run: |
+          cd ./VIVO-Harvester
+          mvn clean install
