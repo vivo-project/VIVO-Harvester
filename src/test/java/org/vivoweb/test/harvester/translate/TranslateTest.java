@@ -541,7 +541,7 @@ public class TranslateTest extends TestCase {
 			+ "</rdf:RDF>";
 	
 	/** */
-	private static final String mapFilePath = "example-scripts/bash-scripts/full-harvest-examples/example-pubmed/pubmed-to-vivo.datamap.xsl";
+	private static final String mapFilePath = "example-scripts/bash-scripts/full-harvest-examples/1.6-examples/example-pubmed/pubmed-to-vivo.datamap.xsl";
 	/** */
 	private RecordHandler inRH;
 	/** */
