@@ -31,7 +31,7 @@ public class NLMJournalFetch extends NIHFetch {
 	/**
 	 * a base xmlrecordoutputstream
 	 */
-	protected static XMLRecordOutputStream baseXMLROS = new XMLRecordOutputStream(new String[]{"NLMCatalogRecord"}, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE NLMCatalogRecordSet PUBLIC \"-//NLM//DTD CatalogRecord, 1st January 2009//EN\" \"http://www.nlm.nih.gov/databases/dtd/nlmcatalogrecord_090101.dtd\">\n<NLMCatalogRecordSet>\n", "\n</NLMCatalogRecordSet>", ".*?<[nN][lL][mM][uU][nN][iI][qQ][uU][eE][iI][dD].*?>(.*?)</[nN][lL][mM][uU][nN][iI][qQ][uU][eE][iI][dD]>.*?", null);
+	protected static XMLRecordOutputStream baseXMLROS = new XMLRecordOutputStream(new String[]{"NLMCatalogRecord"}, "<?xml version=\"1.0\" ?>\n<!DOCTYPE NLMCatalogRecordSet PUBLIC \"-//NLM//DTD NLMCatalogRecordSet, 1st June 2017//EN\" \"https://www.nlm.nih.gov/databases/dtd/nlmcatalogrecordset_170601.dtd\">\n<NLMCatalogRecordSet>", "\n</NLMCatalogRecordSet>", ".*?<[nN][lL][mM][uU][nN][iI][qQ][uU][eE][iI][dD].*?>(.*?)</[nN][lL][mM][uU][nN][iI][qQ][uU][eE][iI][dD]>.*?", null);
 	
 	/**
 	 * Constructor: Primary method for running a Journal Fetch. The email address of the person responsible for this
@@ -69,7 +69,7 @@ public class NLMJournalFetch extends NIHFetch {
 	@Override
 	public void fetchRecords(String WebEnv, String QueryKey, String retStart, String numRecords) throws IOException {
 		StringBuilder urlSb = new StringBuilder();
-		urlSb.append("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?");
+		urlSb.append("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?");
 		urlSb.append("&db=");
 		urlSb.append(database);
 		urlSb.append("&query_key=");

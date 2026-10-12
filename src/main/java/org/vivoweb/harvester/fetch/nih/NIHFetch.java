@@ -7,17 +7,29 @@ package org.vivoweb.harvester.fetch.nih;
 
 import gov.nih.nlm.ncbi.www.soap.eutils.EUtilsServiceStub;
 import gov.nih.nlm.ncbi.www.soap.eutils.EUtilsServiceStub.IdListType;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.rmi.RemoteException;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.vivoweb.harvester.util.WebAide;
 import org.vivoweb.harvester.util.args.ArgDef;
 import org.vivoweb.harvester.util.args.ArgList;
 import org.vivoweb.harvester.util.args.ArgParser;
 import org.vivoweb.harvester.util.repo.RecordHandler;
 import org.vivoweb.harvester.util.repo.RecordStreamOrigin;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * Shared code for modules for fetching NIH data using the SOAP or HTML Interface Based on the example code available at
@@ -114,49 +126,58 @@ public abstract class NIHFetch implements RecordStreamOrigin {
 	 */
 	public String[] runESearch(String term, boolean logMessage) throws IOException {
 		String[] env = new String[4];
-		log.debug("running "+this.databaseName+" query: "+term);
 		try {
-			// create service connection
-			EUtilsServiceStub service = new EUtilsServiceStub();
-			// create a new search
-			EUtilsServiceStub.ESearchRequest req = new EUtilsServiceStub.ESearchRequest();
-			// set search to pubmed database
-			req.setDb(this.databaseName);
-			// set search term
-			req.setTerm(term);
-			// save this search so we can use the returned set
-			req.setUsehistory("y");
-			// run the search and get result set
-			EUtilsServiceStub.ESearchResult res = service.run_eSearch(req);
-			// save the environment data
-			env[0] = res.getWebEnv();
-			log.trace("webenv: "+env[0]);
-			env[1] = res.getQueryKey();
-			log.trace("querykey: "+env[1]);
-        	env[2] = "" + res.getCount();//getIdList().getId().length;
-        	
- 			if(env[2] == null) {
-				throw new IllegalArgumentException("Query Has No Results: "+term);
+			StringBuilder urlSb = new StringBuilder();
+			urlSb.append("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?");
+			urlSb.append("&db=");
+			urlSb.append(databaseName);
+			urlSb.append("&tool=");
+			urlSb.append(urlEncode(getToolName()));
+			urlSb.append("&email=");
+			urlSb.append(getEmailAddress());
+			urlSb.append("&usehistory=y");
+			urlSb.append("&retmode=xml");
+			urlSb.append("&term=");
+			urlSb.append(urlEncode(term));
+			if(logMessage) {
+				//				log.debug(urlSb.toString());
 			}
-			IdListType ids = res.getIdList();
-			if(ids != null && ids.getId() != null && ids.getId().length > 0) {
-				env[3] = ids.getId()[0];
-				log.trace("top id: "+env[3]);
-			} else {
-				// Eliza: comment out the following line
-				// throw new IllegalArgumentException("Query Has No Results: "+term);
-				// Eliza: added this log trace instead
-				log.trace("Query Has No Results: "+term);
+			
+			DocumentBuilderFactory docBuildFactory = DocumentBuilderFactory.newInstance();
+			docBuildFactory.setIgnoringComments(true);
+
+			String xmlResponse = WebAide.getURLContents(urlSb.toString());
+			Document doc = docBuildFactory.newDocumentBuilder().parse(new InputSource(new ByteArrayInputStream(xmlResponse.getBytes(
+				StandardCharsets.UTF_8))));
+
+			Node webEnv = doc.getElementsByTagName("WebEnv").item(0);
+			if (webEnv == null) {
+				throw new IllegalArgumentException();
 			}
+			env[0] = webEnv.getTextContent();
+			env[1] = doc.getElementsByTagName("QueryKey").item(0).getTextContent();
+			env[2] = doc.getElementsByTagName("Count").item(0).getTextContent();
+			env[3] = doc.getElementsByTagName("Id").item(0).getTextContent();
 			if(logMessage) {
 				log.info("Query resulted in a total of " + env[2] + " records.");
 			}
-		} catch(RemoteException e) {
-			throw new IOException("NIH Fetch ESearch failed with error: ", e);
+		} catch(MalformedURLException e) {
+			throw new IOException(e);
+		} catch(SAXException e) {
+			throw new IOException(e);
+		} catch(ParserConfigurationException e) {
+			throw new IOException(e);
 		}
 		return env;
 	}
-	
+
+	private String urlEncode(String value) {
+		try {
+			return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e); // Should never happen
+		}
+	}
 	/**
 	 * Executes the task
 	 * @throws IOException error processing search
