@@ -93,6 +93,7 @@ public class DatabaseClone {
 		if(outputConn != null) {
 			try {
 				this.db2 = new DatabaseConnection(outputConn);
+				this.db2.getConfig().setProperty(DatabaseConfig.FEATURE_ALLOW_EMPTY_FIELDS, Boolean.TRUE);
 			} catch(DatabaseUnitException e) {
 				throw new IOException(e);
 			}
@@ -278,7 +279,15 @@ public class DatabaseClone {
 			Map<Integer,Map<String, String>> outputDbTypes = getDbTypes(db2conn, "output");
 			ResultSet tableData = db2conn.getMetaData().getTables(db2conn.getCatalog(), null, "%", tableTypes);
 			while(tableData.next()) {
+				String schemaName = tableData.getString("TABLE_SCHEM");
+				if (schemaName.equals("INFORMATION_SCHEMA")) {
+					continue;
+				}
 				String db2tableName = tableData.getString("TABLE_NAME");
+				String scheme2Name = tableData.getString("TABLE_SCHEM");
+				if ("INFORMATION_SCHEMA".equals(scheme2Name)) {
+					continue;
+				}
 				for(String db1table : data.getTableNames()) {
 					if(db1table.trim().equalsIgnoreCase(db2tableName.trim())) {
 						log.debug("Droping table '"+db2tableName+"' from output database");
@@ -301,6 +310,12 @@ public class DatabaseClone {
 						log.debug("Getting column information for '"+colName+"'");
 						Integer typeCode = Integer.valueOf(columnRS.getInt("DATA_TYPE"));
 						int size = columnRS.getInt("COLUMN_SIZE");
+						if (typeCode.intValue() == Types.TIMESTAMP) {
+							size = 6;
+						}
+						if (typeCode.intValue() == Types.TIMESTAMP_WITH_TIMEZONE) {
+							size = 0;
+						} 
 						if(!outputDbTypes.containsKey(typeCode)) {
 							if(typeCode.intValue() == Types.BIT) {
 								typeCode = Integer.valueOf(Types.BOOLEAN);
@@ -393,6 +408,10 @@ public class DatabaseClone {
 				Set<String> tableSet = new HashSet<String>();
 				ResultSet tableRS = this.db1.getConnection().getMetaData().getTables(null, null, null, tableTypes);
 				while(tableRS.next()) {
+					 String schemaName = tableRS.getString("TABLE_SCHEM");
+						if (schemaName.equals("INFORMATION_SCHEMA")) {
+							continue;
+						}
 					tableSet.add(preEscapePattern+tableRS.getString("TABLE_NAME")+postEscaptePattern);
 				}
 				this.tables = tableSet.toArray(new String[]{});
