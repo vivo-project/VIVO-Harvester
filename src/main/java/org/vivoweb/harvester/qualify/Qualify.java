@@ -22,6 +22,7 @@ import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
+import org.apache.jena.vocabulary.RDF;
 
 /**
  * Qualify data using SPARQL queries
@@ -210,9 +211,10 @@ public class Qualify {
 	 */
 	private String encodeString(String str, RDFDatatype datatype, String lang) {
 		String encStr = "\"" + str + "\"";
-		if(datatype != null) {
+		if(datatype != null && !datatype.getURI().equals(RDF.langString.getURI())) {
 			encStr += "^^<" + datatype.getURI().trim() + ">";
-		} else if(StringUtils.isNotBlank(lang)) {
+		}
+		if (StringUtils.isNotBlank(lang)) {
 			encStr += "@" + lang.trim();
 		}
 		return encStr;
