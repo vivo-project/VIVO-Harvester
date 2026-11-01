@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -201,7 +200,7 @@ public class Score {
 		boolean test = true;
 		for (Class<?> algClass : this.algorithms.values()) {
 			log.trace("algClass: "+ algClass.getSimpleName()); 
-			if (algClass.getClass().isInstance(EqualityTest.class)  || algClass.getClass().isInstance(EqualityIgnoreCaseTest.class)   ) {
+			if (EqualityTest.class.isAssignableFrom(algClass)  || EqualityIgnoreCaseTest.class.isAssignableFrom(algClass)   ) {
 				test = true;
 			} else {
 			   test = false;

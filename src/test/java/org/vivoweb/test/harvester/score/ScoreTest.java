@@ -18,6 +18,7 @@ import org.vivoweb.harvester.score.algorithm.EqualityTest;
 import org.vivoweb.harvester.score.algorithm.NormalizedDoubleMetaphoneDifference;
 import org.vivoweb.harvester.util.InitLog;
 import org.vivoweb.harvester.util.repo.JenaConnect;
+import org.vivoweb.harvester.util.repo.MemJenaConnect;
 import org.vivoweb.harvester.util.repo.SDBJenaConnect;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
@@ -369,7 +370,7 @@ public class ScoreTest extends TestCase {
 			"</rdf:Description>" +
 		"</rdf:RDF>";
 	/** */
-	private SDBJenaConnect input;
+	private JenaConnect input;
 	/** */
 	private JenaConnect vivo;
 	/** */
@@ -561,7 +562,7 @@ public class ScoreTest extends TestCase {
 		weights.put("lName", Float.valueOf(8 / 16f));
 		weights.put("type", Float.valueOf(0 / 16f));
 		
-//		log.debug("Input Dump Pre-Score\n" + this.input.exportRdfToString());
+		//log.debug("Input Dump Pre-Score\n" + this.input.exportRdfToString());
 		
 		// run score
 		log.info("Score: Start");
@@ -636,7 +637,7 @@ public class ScoreTest extends TestCase {
 	protected void setUp() throws Exception {
 		InitLog.initLogger(null, null);
 		// load input models
-		this.input = new SDBJenaConnect("jdbc:h2:mem:test", "sa", "", "H2", "org.h2.Driver", "layout2", "input");
+		this.input = new MemJenaConnect();
 		this.input.loadRdfFromString(inputRDF, null, null);
 		
 		this.vivo = this.input.neighborConnectClone("vivo");
