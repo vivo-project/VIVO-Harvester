@@ -1,0 +1,30 @@
+#!/bin/bash
+
+#Copyright (c) 2010-2011 VIVO Harvester Team. For full list of contributors, please see the AUTHORS file provided.
+#All rights reserved.
+#This program and the accompanying materials are made available under the terms of the new BSD license which accompanies this distribution, and is available at http://www.opensource.org/licenses/bsd-license.html
+
+#update memory to match your hardware -- set both to be the same, in general the more memory the better, but too much can cause errors as well.
+#8G-12G on large vivo's seems to work well
+#MIN_MEM=2g
+#MAX_MEM=8g
+MIN_MEM=2g
+MAX_MEM=8g
+#Variable for optimizations to the Java virtual machine.
+#-server                                                Run in server mode, which takes longer to start but runs faster
+#-d64                                                   Use 64-bit JVM
+#-XX:+UseParallelOldGC                  Use high throughput parallel GC on old generation 
+#-XX:+DisableExplicitGC                 Prevent direct calls to garbage collection in the code
+#-XX:+UseAdaptiveGCBoundary             Allow young/old boundary to move
+#-XX:-UseGCOverheadLimit                Limit the amount of time that Java will stay in Garbage Collection before throwing an out of memory exception
+#-XX:SurvivorRatio=16                   Shrink eden slightly (Normal is 25)
+#-Xnoclassgc                                    Disable collection of class objects
+#-XX:ParallelGCThreads=3                Maximum number of Parallel garbage collection tasks
+HARVESTER_JAVA_OPTS="" 
+#HARVESTER_JAVA_OPTS="-server -d64 -XX:+UseParallelOldGC -XX:+DisableExplicitGC -XX:+UseAdaptiveGCBoundary -XX:-UseGCOverheadLimit -XX:SurvivorRatio=16 -Xnoclassgc -XX:ParallelGCThreads=3"
+HARVESTER_DIAGNOSTIC_OPTS=""
+#HARVESTER_DIAGNOSTIC_OPTS="-XX:+PrintG -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:HeapDumpPath /data/vivo/harvester/harvester_1.3/bin/heap-dumps/ -XX:-HeapDumpOnOutOfMemoryError"
+OPTS="-Xms$MIN_MEM -Xmx$MAX_MEM $HARVESTER_JAVA_OPTS $HARVESTER_DIAGNOSTIC_OPTS -Dharvester-task=$HARVEST_NAME.$DATE"
+
+#pass incoming params to java program
+java $OPTS -Dprocess-task=RecordHandler org.vivoweb.harvester.util.TransferImages "$@"

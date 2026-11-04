@@ -28,5 +28,3 @@ utilities/rdbmigration/.work
 **/.settings
 **/.classpath
 **/.project
-**/bin/
-/bin
