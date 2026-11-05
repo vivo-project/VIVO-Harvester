@@ -14,15 +14,15 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.slf4j.Logger;
@@ -73,6 +73,11 @@ public class SparqlUpdate {
 	 */
 	
 	private String type;
+
+	/*
+	 * number of triples sent per update request
+	 */
+	private int batchSize;
 	 
 	
 	/**
@@ -110,6 +115,9 @@ public class SparqlUpdate {
 		// get update type
 		this.type = argList.get("t");
 		
+		// get batch size
+		this.batchSize = Integer.parseInt(argList.get("b"));
+		
 		// Require model args
 		if(this.model == null) {
 			throw new IllegalArgumentException("Must provide an output model");
@@ -145,6 +153,10 @@ public class SparqlUpdate {
 			throw new IllegalArgumentException("The update type must be add or delete");	
 		}
 		
+		if (this.batchSize < 1) {
+			throw new IllegalArgumentException("The batch size must be greater than zero");
+		}
+		
 		 
 	}
 	
@@ -153,40 +165,77 @@ public class SparqlUpdate {
 	 * @throws IOException error
 	 */
 	private void execute() throws IOException {
-		StringBuffer updateBuffer = new StringBuffer();
-		if (this.type.equals("add")) {
+		Model rdfModel = ModelFactory.createDefaultModel();
+		deduceRdfFormatAndParseData(rdfModel, new File(this.inRDF));
+
+		String ntriples;
+		try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+			rdfModel.write(out, "N-TRIPLES");
+			ntriples = out.toString("UTF-8");
+		}
+		rdfModel.removeAll();
+
+		RequestConfig requestConfig = RequestConfig.custom().setExpectContinueEnabled(true).build();
+		try (CloseableHttpClient httpclient = HttpClients.custom().setDefaultRequestConfig(requestConfig).build()) {
+			List<String> batch = new ArrayList<>();
+			int sent = 0;
+			// splitting on newlines is safe because a newline inside a literal is escaped in this serialisation
+			for (String line : ntriples.split("\n")) {
+				if (line.trim().isEmpty()) {
+					continue;
+				}
+				batch.add(line);
+				if (batch.size() >= this.batchSize) {
+					postBatch(httpclient, batch);
+					sent += batch.size();
+					batch.clear();
+				}
+			}
+			if (!batch.isEmpty()) {
+				postBatch(httpclient, batch);
+				sent += batch.size();
+			}
+            log.info("Sent {} triples to {} in batches of up to {}",
+                new Object[] {sent, this.url, this.batchSize});
+		}
+	}
+
+	/**
+	 * Send a single batch of triples as one update request
+	 * @param httpclient the client to send with
+	 * @param triples the triples to send
+	 * @throws IOException the update was rejected or could not be sent
+	 */
+	private void postBatch(CloseableHttpClient httpclient, List<String> triples) throws IOException {
+		StringBuilder updateBuffer = new StringBuilder();
+		if (this.type.equalsIgnoreCase("add")) {
 			updateBuffer.append("INSERT DATA {");
 		} else {
 			updateBuffer.append("DELETE DATA {");
 		}
 		updateBuffer.append("GRAPH <").append(this.model).append("> {");
-
-		//String rdfString = FileAide.getTextContent(this.inRDF);
-		Model model = ModelFactory.createDefaultModel();
-		deduceRdfFormatAndParseData(model, new File(this.inRDF));
-
-		try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-			model.write(out, "N-TRIPLES");
-			updateBuffer.append(out.toString("UTF-8"));
+		for (String triple : triples) {
+			updateBuffer.append(triple).append("\n");
 		}
 		updateBuffer.append("  }");
 		updateBuffer.append("}");
 
-		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
-			HttpPost httpPost = new HttpPost(this.url);
+		HttpPost httpPost = new HttpPost(this.url);
 
-			List<NameValuePair> nvps = new ArrayList<>();
-			nvps.add(new BasicNameValuePair("email", this.username));
-			nvps.add(new BasicNameValuePair("password", this.password));
-			nvps.add(new BasicNameValuePair("update", updateBuffer.toString()));
-			httpPost.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
-			try (CloseableHttpResponse response = httpclient.execute(httpPost)) {
-				System.out.println(response.getStatusLine());
-				HttpEntity entity = response.getEntity();
-				try (InputStream is = entity.getContent()) {
-					IOUtils.copy(is, System.out);
-				}
+		List<NameValuePair> nvps = new ArrayList<>();
+		nvps.add(new BasicNameValuePair("email", this.username));
+		nvps.add(new BasicNameValuePair("password", this.password));
+		nvps.add(new BasicNameValuePair("update", updateBuffer.toString()));
+		httpPost.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
+
+		try (CloseableHttpResponse response = httpclient.execute(httpPost)) {
+			int status = response.getStatusLine().getStatusCode();
+			String body = response.getEntity() == null ? "" : EntityUtils.toString(response.getEntity(), "UTF-8").trim();
+			if ((status < 200) || (status >= 300)) {
+                log.error("{} {}", response.getStatusLine(), body);
+				throw new IOException("SPARQL update of " + triples.size() + " triples failed with HTTP status " + status);
 			}
+            log.debug("{} {}", response.getStatusLine(), body);
 		}
 	}
 
@@ -219,6 +268,7 @@ public class SparqlUpdate {
 		parser.addArgument(new ArgDef().setShortOption('u').setLongOpt("username").withParameter(true, "USERNAME").setDescription("vivo admin user name").setRequired(true)); 
 		parser.addArgument(new ArgDef().setShortOption('p').setLongOpt("password").withParameter(true, "PASSWORD").setDescription("vivo admin password").setRequired(true)); 
 		parser.addArgument(new ArgDef().setShortOption('U').setLongOpt("url").withParameter(true, "URL").setDescription("sparql update url").setRequired(true)); 
+		parser.addArgument(new ArgDef().setShortOption('b').setLongOpt("batchSize").withParameter(true, "BATCH_SIZE").setDescription("number of triples sent per update request").setDefaultValue("10000").setRequired(false));
 		parser.addArgument(new ArgDef().setShortOption('t').setLongOpt("type").withParameter(true, "UPDATE TYPE").setDescription("type of update: add or delete").setRequired(true));
 		// Outputs
 		parser.addArgument(new ArgDef().setShortOption('m').setLongOpt("model").withParameter(true, "MODEL").setDescription("name of jena model").setRequired(true)); 
@@ -233,7 +283,7 @@ public class SparqlUpdate {
 		Exception error = null;
 		try {
 			InitLog.initLogger(args, getParser());
-			log.info(getParser().getAppName() + ": Start");
+            log.info("{}: Start", getParser().getAppName());
 			new SparqlUpdate(args).execute();
 		} catch(IllegalArgumentException e) {
 			log.error(e.getMessage());
@@ -249,7 +299,7 @@ public class SparqlUpdate {
 			log.debug("Stacktrace:",e);
 			error = e;
 		} finally {
-			log.info(getParser().getAppName() + ": End");
+            log.info("{}: End", getParser().getAppName());
 			if(error != null) {
 				System.exit(1);
 			}

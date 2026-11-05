@@ -15,5 +15,6 @@
     <Param name="model">http://vitro.mannlib.cornell.edu/default/vitro-kb-2</Param>
     <Param name="username">jaf30@cornell.edu</Param>
     <Param name="password">vivoadmin</Param>
+    <Param name="batchSize">10000</Param>
 
 </Task>

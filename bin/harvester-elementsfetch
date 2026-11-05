@@ -7,8 +7,9 @@
 
 #update memory to match your hardware -- set both to be the same, in general the more memory the better, but too much can cause errors as well.
 #8G-12G on large vivo's seems to work well
-MIN_MEM=1g
-MAX_MEM=1g
+#these defaults can be overridden without editing this file by exporting HARVESTER_MIN_MEM/HARVESTER_MAX_MEM
+MIN_MEM="${HARVESTER_MIN_MEM:-1g}"
+MAX_MEM="${HARVESTER_MAX_MEM:-1g}"
 
 #Variable for optimizations to the Java virtual machine.
 #-server						Run in server mode, which takes longer to start but runs faster

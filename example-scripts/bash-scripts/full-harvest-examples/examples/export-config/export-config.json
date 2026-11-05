@@ -1,0 +1,302 @@
+{
+  "exportModules": [
+    {
+      "name": "OpenAlex",
+      "description": {
+        "en-US": "Harvest publication metadata from OpenAlex API based on institutional affiliation and date range",
+        "sr-Latn-RS": "Prikupljanje metapodataka publikacija sa OpenAlex API-ja na osnovu institucionalne afilijacije i datuma"
+      },
+      "path": "example-scripts/bash-scripts/full-harvest-examples/examples/example-jsonfetch-openalex",
+      "schedulable": true,
+      "parameters": [
+        {
+          "name": {
+            "en-US": "Log level",
+            "sr-Latn-RS": "Nivo logovanja"
+          },
+          "type": "select",
+          "symbol": "-w",
+          "default": "INFO",
+          "required": true,
+          "options": ["DEBUG", "INFO", "WARN", "ERROR"]
+        },
+        {
+          "name": {
+            "en-US": "Ingest graph",
+            "sr-Latn-RS": "Graf za čuvanje"
+          },
+          "type": "graph",
+          "symbol": "--graph",
+          "default": "http://vitro.mannlib.cornell.edu/default/vitro-kb-2",
+          "required": true
+        },
+        {
+          "name": {
+            "en-US": "API URL",
+            "sr-Latn-RS": "API adresa"
+          },
+          "type": "url",
+          "symbol": "-u",
+          "default": "https://api.openalex.org/works",
+          "required": true,
+          "subfields": [
+            {
+              "name": {
+                "en-US": "Institution ROR ID",
+                "sr-Latn-RS": "ROR identifikator institucije"
+              },
+              "type": "text",
+              "group": "filter",
+              "groupSep": ",",
+              "kvSep": ":",
+              "symbol": "authorships.institutions.ror",
+              "default": "https://ror.org/04aj4c181"
+            },
+            {
+              "name": {
+                "en-US": "From publication date",
+                "sr-Latn-RS": "Publikacije od datuma"
+              },
+              "type": "text",
+              "group": "filter",
+              "groupSep": ",",
+              "kvSep": ":",
+              "symbol": "from_publication_date",
+              "default": "2018-01-01",
+              "startDateAttribute": true
+            },
+            {
+              "name": {
+                "en-US": "To publication date",
+                "sr-Latn-RS": "Publikacije do datuma"
+              },
+              "type": "text",
+              "group": "filter",
+              "groupSep": ",",
+              "kvSep": ":",
+              "symbol": "to_publication_date",
+              "default": "2020-12-31",
+              "endDateAttribute": true
+            },
+            {
+              "name": {
+                "en-US": "Records per page",
+                "sr-Latn-RS": "Zapisa po stranici"
+              },
+              "type": "text",
+              "symbol": "per-page",
+              "default": "200"
+            },
+            {
+              "name": {
+                "en-US": "API key",
+                "sr-Latn-RS": "API ključ"
+              },
+              "type": "text",
+              "symbol": "api_key",
+              "required": true
+            },
+            {
+              "name": {
+                "en-US": "Cursor position",
+                "sr-Latn-RS": "Pozicija kursora"
+              },
+              "type": "text",
+              "symbol": "cursor",
+              "default": "*"
+            },
+            {
+              "name": {
+                "en-US": "Contact email",
+                "sr-Latn-RS": "Kontakt email"
+              },
+              "type": "text",
+              "symbol": "mailto",
+              "default": "you@example.com"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "OAI DSpace",
+      "description": {
+        "en-US": "Harvest metadata from DSpace repositories using OAI-PMH protocol with date range filtering",
+        "sr-Latn-RS": "Prikupljanje metapodataka iz DSpace repozitorijuma korišćenjem OAI-PMH protokola sa filtriranjem po datumu"
+      },
+      "path": "example-scripts/bash-scripts/full-harvest-examples/examples/example-oaifetch-dspace",
+      "schedulable": true,
+      "parameters": [
+        {
+          "name": {
+            "en-US": "Log level",
+            "sr-Latn-RS": "Nivo logovanja"
+          },
+          "type": "select",
+          "symbol": "-w",
+          "default": "INFO",
+          "required": true,
+          "options": ["DEBUG", "INFO", "WARN", "ERROR"]
+        },
+        {
+          "name": {
+            "en-US": "Ingest graph",
+            "sr-Latn-RS": "Graf za čuvanje"
+          },
+          "type": "graph",
+          "symbol": "--graph",
+          "default": "http://vitro.mannlib.cornell.edu/default/vitro-kb-2",
+          "required": true
+        },
+        {
+          "name": {
+            "en-US": "OAI endpoint URL",
+            "sr-Latn-RS": "OAI endpoint adresa"
+          },
+          "type": "url",
+          "symbol": "-u",
+          "default": "https://dspace.mit.edu/oai/request",
+          "required": true
+        },
+        {
+          "name": {
+            "en-US": "Start date",
+            "sr-Latn-RS": "Početni datum"
+          },
+          "type": "dateTime",
+          "symbol": "-s",
+          "default": "2023-05-15T00:00:00Z",
+          "startDateAttribute": true,
+          "required": true
+        },
+        {
+          "name": {
+            "en-US": "End date",
+            "sr-Latn-RS": "Krajnji datum"
+          },
+          "type": "dateTime",
+          "symbol": "-e",
+          "default": "2023-05-17T00:00:00Z",
+          "endDateAttribute": true,
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "OAI EPrints",
+      "description": {
+        "en-US": "Harvest metadata from EPrints repositories via OAI-PMH with configurable set specification",
+        "sr-Latn-RS": "Prikupljanje metapodataka iz EPrints repozitorijuma putem OAI-PMH sa konfigurabilnom specifikacijom seta"
+      },
+      "path": "example-scripts/bash-scripts/full-harvest-examples/examples/example-oaifetch-eprints",
+      "schedulable": true,
+      "parameters": [
+        {
+          "name": {
+            "en-US": "Log level",
+            "sr-Latn-RS": "Nivo logovanja"
+          },
+          "type": "select",
+          "symbol": "-w",
+          "default": "INFO",
+          "required": true,
+          "options": ["DEBUG", "INFO", "WARN", "ERROR"]
+        },
+        {
+          "name": {
+            "en-US": "Ingest graph",
+            "sr-Latn-RS": "Graf za čuvanje"
+          },
+          "type": "graph",
+          "symbol": "--graph",
+          "default": "http://vitro.mannlib.cornell.edu/default/vitro-kb-2",
+          "required": true
+        },
+        {
+          "name": {
+            "en-US": "OAI endpoint URL",
+            "sr-Latn-RS": "OAI endpoint adresa"
+          },
+          "type": "url",
+          "symbol": "-u",
+          "default": "https://vuir.vu.edu.au/cgi/oai2",
+          "required": true
+        },
+        {
+          "name": {
+            "en-US": "Start date",
+            "sr-Latn-RS": "Početni datum"
+          },
+          "type": "dateTime",
+          "symbol": "-s",
+          "default": "2023-05-15T00:00:00Z",
+          "startDateAttribute": true,
+          "required": true
+        },
+        {
+          "name": {
+            "en-US": "End date",
+            "sr-Latn-RS": "Krajnji datum"
+          },
+          "type": "dateTime",
+          "symbol": "-e",
+          "default": "2023-05-17T00:00:00Z",
+          "endDateAttribute": true,
+          "required": true
+        },
+        {
+          "name": {
+            "en-US": "Set specification",
+            "sr-Latn-RS": "Specifikacija seta"
+          },
+          "type": "text",
+          "symbol": "-S",
+          "default": "publications",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "CSV Ingest",
+      "description": {
+        "en-US": "Import bibliographic records from CSV file into VIVO triple store",
+        "sr-Latn-RS": "Uvoz bibliografskih zapisa iz CSV datoteke u VIVO triple bazu"
+      },
+      "path": "example-scripts/bash-scripts/full-harvest-examples/examples/example-csv",
+      "schedulable": false,
+      "parameters": [
+        {
+          "name": {
+            "en-US": "Log level",
+            "sr-Latn-RS": "Nivo logovanja"
+          },
+          "type": "select",
+          "symbol": "-w",
+          "default": "INFO",
+          "required": true,
+          "options": ["DEBUG", "INFO", "WARN", "ERROR"]
+        },
+        {
+          "name": {
+            "en-US": "Ingest graph",
+            "sr-Latn-RS": "Graf za čuvanje"
+          },
+          "type": "graph",
+          "symbol": "--graph",
+          "default": "http://vitro.mannlib.cornell.edu/default/vitro-kb-2",
+          "required": true
+        },
+        {
+          "name": {
+            "en-US": "CSV file",
+            "sr-Latn-RS": "CSV datoteka"
+          },
+          "type": "file",
+          "symbol": "-f",
+          "acceptType": ".csv,text/csv",
+          "required": true
+        }
+      ]
+    }
+  ]
+}

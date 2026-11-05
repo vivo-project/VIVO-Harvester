@@ -1,0 +1,23 @@
+This example will demonstrate fetching OpenAlex REST API (JSON) provider which exposes content
+using internal metadata format and loading it into a VIVO instance.
+
+You will need to:
+
+- Modify the fetch.conf.xml configuration file to specify harvest endpoint, time period, set, etc.
+- Examine the run-fetch.sh (or .bat) script and type the location of the VIVO Harvester installation directory.
+- You can uncomment the score and match functions if you want deduplication to be performed (it is turned off by default)
+- Modify the vivo.model.xml file to provide parameters for accessing your VIVO web application and tdbContentModels directory.
+- Shut down your VIVO instance (if you are performing load using the TDB, in order to free the TDB lock)
+- Run `run-fetch.sh [tdb/sparql]` (use .bat script if you are on WindowsOS. It is recommended that you perform the first harvest, especially for large datasets, using TDB, as SPARQL API may have trouble loading very large files. All subsequent re-harvests can be performed with SPARQL API without the need for restarting your VIVO instance)
+- If you imported using TDB, you have to recompute inferences using "Site Admin"->"Recompute inferences" in order to be able to properly browse imported data
+- Restart your VIVO instance (in case you loaded data using the TDB) and reindex the search indexes
+
+Note: When performing TDB import, if it's your first time running VIVO, it is mandatory that you first start up VIVO and wait for
+the default entities (ABAC, locations, initial concepts...) to initialize. Only after first initialization is it safe to perform TDB import.
+Failure to do this may result in losing all imported data when the application is restarted.
+
+Note: If you are running an older VIVO version, you should navigate to pom.xml and update jena.version to that of your VIVO instance. That way, you will
+avoid any compatibility issues when performing TDB import. Failure to do this may result in a simple "Error: null" message when trying to transfer your local TDB content models
+to the actual tdbContentModels directory.
+
+Note: It is recommended that when you are performing your initial harvest, you use TDB import. Every other time SPARQL API import should be your go-to method.
