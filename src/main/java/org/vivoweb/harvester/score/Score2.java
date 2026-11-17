@@ -53,7 +53,7 @@ import org.apache.jena.util.iterator.ExtendedIterator;
  * @thanks Chris Westling cmw48@cornell.edu
  */
 public class Score2 {
-	/**
+	/** 
 	 * SLF4J Logger
 	 */
 	private static Logger log = LoggerFactory.getLogger(Score2.class);
@@ -202,7 +202,7 @@ public class Score2 {
 		boolean test = true;
 		for (Class<?> algClass : this.algorithms.values()) {
 			log.trace("algClass: "+ algClass.getSimpleName()); 
-			if (algClass.getClass().isInstance(EqualityTest.class)  || algClass.getClass().isInstance(EqualityIgnoreCaseTest.class)   ) {
+			if (EqualityTest.class.isAssignableFrom(algClass)  || EqualityIgnoreCaseTest.class.isAssignableFrom(algClass)   ) {
 				test = true;
 			} else {
 			   test = false;
