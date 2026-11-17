@@ -36,7 +36,7 @@ public class DatabaseCloneTest extends TestCase {
 	/** */
 	private static String inputDriverClass = "org.h2.Driver";
 	/** */
-	private static String inputConnLine = "jdbc:h2:databaseclonetest-temp/input/store";
+	private static String inputConnLine = "jdbc:h2:mem:DatabaseCloneTest";
 	/** */
 	private static String inputUsername = "sa";
 	/** */
@@ -54,7 +54,7 @@ public class DatabaseCloneTest extends TestCase {
 	/** */
 	private static String outputDriverClass = "org.h2.Driver";
 	/** */
-	private static String outputConnLine = "jdbc:h2:databaseclonetest-temp/output/store";
+	private static String outputConnLine = "jdbc:h2:mem:DatabaseCloneTestTmp";
 	/** */
 	private static String outputUsername = "sa";
 	/** */
@@ -76,10 +76,10 @@ public class DatabaseCloneTest extends TestCase {
 					"CREATE TABLE `department` (" +
 					"  `dept_id` varchar(8) NOT NULL," +
 					"  `dept_name` varchar(255) NOT NULL," +
-					"  `type_id` int(3) NOT NULL," +
+					"  `type_id` INT NOT NULL," +
 					"  `super_dept_id` varchar(8) NOT NULL," +
 					"  `mod_ts` timestamp," +
-					"  `is_current` tinyint(1)," +
+					"  `is_current` tinyint," +
 					"  PRIMARY KEY (`dept_id`)" +
 					");" +
 			"");
