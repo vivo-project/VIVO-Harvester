@@ -544,6 +544,10 @@ public class JDBCFetch {
 		if(this.tableNames.isEmpty()) {
 			ResultSet tableData = this.cursor.getConnection().getMetaData().getTables(this.cursor.getConnection().getCatalog(), null, "%", this.tableTypes);
 			while(tableData.next()) {
+				String schemaName = tableData.getString("TABLE_SCHEM");
+				if (schemaName.equals("INFORMATION_SCHEMA")) {
+					continue;
+				}
 				this.tableNames.add(tableData.getString("TABLE_NAME"));
 			}
 		}

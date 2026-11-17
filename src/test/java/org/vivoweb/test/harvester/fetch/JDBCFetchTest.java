@@ -50,9 +50,9 @@ public class JDBCFetchTest extends TestCase {
 		this.conn = DriverManager.getConnection("jdbc:h2:mem:TestJDBCFetchDB", "sa", "");
 		this.conn.setAutoCommit(false);
 		Statement cursor = this.conn.createStatement();
-		cursor.executeUpdate("CREATE TABLE department (dep_id int(10) NOT NULL AUTO_INCREMENT, `name` text NOT NULL, description text NOT NULL, PRIMARY KEY (dep_id))");
-		cursor.executeUpdate("CREATE TABLE paylevel (id int(10) NOT NULL AUTO_INCREMENT, `name` text NOT NULL, low int(10) NOT NULL, high int(10) NOT NULL, PRIMARY KEY (id))");
-		cursor.executeUpdate("CREATE TABLE faculty (fac_id int(10) NOT NULL AUTO_INCREMENT, badge_num int(10) NOT NULL, fname text NOT NULL, mname text NOT NULL, lname text NOT NULL, jobtitle text NOT NULL, salary int(10) NOT NULL, paygrade_id int(10) NOT NULL, dept_id int(10) NOT NULL, PRIMARY KEY (fac_id), CONSTRAINT faculty_ibfk_1 FOREIGN KEY (paygrade_id) REFERENCES paylevel(id), CONSTRAINT faculty_ibfk_2 FOREIGN KEY (dept_id) REFERENCES department(dep_id))");
+		cursor.executeUpdate("CREATE TABLE department (dep_id INT NOT NULL AUTO_INCREMENT, `name` text NOT NULL, description text NOT NULL, PRIMARY KEY (dep_id))");
+		cursor.executeUpdate("CREATE TABLE paylevel (id INT NOT NULL AUTO_INCREMENT, `name` text NOT NULL, low INT NOT NULL, high INT NOT NULL, PRIMARY KEY (id))");
+		cursor.executeUpdate("CREATE TABLE faculty (fac_id INT NOT NULL AUTO_INCREMENT, badge_num INT NOT NULL, fname text NOT NULL, mname text NOT NULL, lname text NOT NULL, jobtitle text NOT NULL, salary INT NOT NULL, paygrade_id INT NOT NULL, dept_id INT NOT NULL, PRIMARY KEY (fac_id), CONSTRAINT faculty_ibfk_1 FOREIGN KEY (paygrade_id) REFERENCES paylevel(id), CONSTRAINT faculty_ibfk_2 FOREIGN KEY (dept_id) REFERENCES department(dep_id))");
 		cursor.executeUpdate("INSERT INTO paylevel (id, name, low, high) VALUES (1, 'IT Expert', 100000, 300000), (2, 'IT Noob', 20000, 25000);");
 		cursor.executeUpdate("INSERT INTO department (dep_id, name, description) VALUES (1, 'CTRIP', 'UF Clinical & Translational Research Informatics Program');");
 		cursor.executeUpdate("INSERT INTO faculty (fac_id, badge_num, fname, mname, lname, jobtitle, salary, paygrade_id, dept_id) VALUES (1, 12345678, 'Bob', 'Alfred', 'Johnson', 'Software Engineer', 156000, 1, 1), (2, 98765432, 'Fredrick', 'Markus', 'Brown', 'Junior Software Engineer', 22500, 2, 1);");
