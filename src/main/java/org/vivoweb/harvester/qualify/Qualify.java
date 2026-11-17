@@ -213,8 +213,7 @@ public class Qualify {
 		String encStr = "\"" + str + "\"";
 		if(datatype != null && !datatype.getURI().equals(RDF.langString.getURI())) {
 			encStr += "^^<" + datatype.getURI().trim() + ">";
-		}
-		if (StringUtils.isNotBlank(lang)) {
+		} else if(StringUtils.isNotBlank(lang)) {
 			encStr += "@" + lang.trim();
 		}
 		return encStr;
