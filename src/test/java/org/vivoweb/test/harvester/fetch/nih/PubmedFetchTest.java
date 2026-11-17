@@ -14,6 +14,7 @@ import junit.framework.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vivoweb.harvester.fetch.nih.PubmedFetch;
+import org.vivoweb.harvester.fetch.nih.PubmedHTTPFetch;
 import org.vivoweb.harvester.util.InitLog;
 import org.vivoweb.harvester.util.repo.JenaRecordHandler;
 import org.vivoweb.harvester.util.repo.MemJenaConnect;
@@ -61,13 +62,13 @@ public class PubmedFetchTest extends TestCase {
 		//test no records
 		boolean hasRecords = true;
 		try {
-			new PubmedFetch("test@test.com", "", "100", "100", this.rh).execute();
+			new PubmedHTTPFetch("test@test.com", "", "100", "100", this.rh).execute();
 		} catch(IllegalArgumentException e) {
 			hasRecords = false;
 		}
 		// Eliza: Don't understand why it had to throw an exception for empty records
 		// Suppressed the following for now.
-		///assertFalse(hasRecords);
+		assertFalse(hasRecords);
 		assertFalse(this.rh.iterator().hasNext());
 		log.info("END testPubmedFetchNoRecordQuery");
 	}
@@ -83,7 +84,7 @@ public class PubmedFetchTest extends TestCase {
 	public final void testPubmedFetchOneRecord() throws IOException, ParserConfigurationException, SAXException {
 		log.info("BEGIN testPubmedFetchOneRecord");
 		//test 1 record
-		new PubmedFetch("test@test.com", "1:8000[dp]", "1", "1", this.rh).execute();
+		new PubmedHTTPFetch("test@test.com", "1:8000[dp]", "1", "1", this.rh).execute();
 		assertTrue(this.rh.iterator().hasNext());
 		DocumentBuilder docB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 		int count = 0;
@@ -107,7 +108,7 @@ public class PubmedFetchTest extends TestCase {
 	public final void testPubmedFetchManyRecords() throws IOException {
 		log.info("BEGIN testPubmedFetchManyRecords");
 		//test 1200 records, batch 500
-		new PubmedFetch("test@test.com", "1:8000[dp]", "1200", "500", this.rh).execute();
+		new PubmedHTTPFetch("test@test.com", "1:8000[dp]", "1200", "500", this.rh).execute();
 		assertTrue(this.rh.iterator().hasNext());
 		int count = 0;
 		for(Record r : this.rh) {

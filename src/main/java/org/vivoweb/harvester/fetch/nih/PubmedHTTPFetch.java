@@ -21,6 +21,7 @@ import org.vivoweb.harvester.util.args.ArgList;
 import org.vivoweb.harvester.util.args.UsageException;
 import org.vivoweb.harvester.util.repo.RecordHandler;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -101,7 +102,11 @@ public class PubmedHTTPFetch extends NIHFetch {
 			Document doc = docBuildFactory.newDocumentBuilder().parse(new InputSource(new ByteArrayInputStream(xmlResponse.getBytes(
 				StandardCharsets.UTF_8))));
 
-			env[0] = doc.getElementsByTagName("WebEnv").item(0).getTextContent();
+			Node webEnv = doc.getElementsByTagName("WebEnv").item(0);
+			if (webEnv == null) {
+				throw new IllegalArgumentException();
+			}
+			env[0] = webEnv.getTextContent();
 			env[1] = doc.getElementsByTagName("QueryKey").item(0).getTextContent();
 			env[2] = doc.getElementsByTagName("Count").item(0).getTextContent();
 			env[3] = doc.getElementsByTagName("Id").item(0).getTextContent();

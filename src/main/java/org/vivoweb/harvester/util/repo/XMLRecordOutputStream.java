@@ -67,7 +67,7 @@ public class XMLRecordOutputStream extends OutputStream implements Cloneable {
 		this.openTags = new byte[tagsToSplitOn.length][];
 		for(int x = 0; x < tagsToSplitOn.length; x++) {
 			this.closeTags[x] = ("</" + tagsToSplitOn[x] + ">").getBytes();
-			this.openTags[x] = ("<" + tagsToSplitOn[x] + ">").getBytes();
+			this.openTags[x] = ("<" + tagsToSplitOn[x] ).getBytes();
 		}
 		this.header = headerInfo;
 		this.footer = footerInfo;
