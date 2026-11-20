@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2010-2011 VIVO Harvester Team. For full list of contributors, please see the AUTHORS file provided.
+  All rights reserved.
+  This program and the accompanying materials are made available under the terms of the new BSD license which accompanies this distribution, and is available at http://www.opensource.org/licenses/bsd-license.html
+-->
+<Config>
+<!--
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+<%	===== Models ===== 																									%>
+<%	type - defines which type of jena model																				%>
+<%		Possible Values:																								%>
+<%			<Param name="type">tdb</Param> - defines a tdb jena model													%>
+<%			<Param name="type">sdb</Param> - defines an sdb jena model													%>
+<%			<Param name="type">rdb</Param> - defines an rdb jena model													%>
+<%			<Param name="type">file</Param> - defines an rdf file to use as a model										%>
+<%																														%>
+<%	===== Model Parameters ===== 																						%>
+<%	dbDir - the directory to store a tdb model in 																		%>
+<%			(only needed when type is tdb)	 																			%>
+<%		Example Values:																									%>
+<%			<Param name="dbDir">/absolute/path/to/dir</Param> - An absolute path to a directory on						%>
+<%				linux/unix/macosx operating systems																		%>
+<%			<Param name="dbDir">C:/absolute/path/to/dir</Param> - An absolute path to a directory on					%>
+<%				a windows operating system																				%>
+<%			<Param name="dbDir">relative/path/to/dir</Param> - A path to a directory that is relative					%>
+<%				to the folder the shell was in when this command was executed											%>
+<%	=== 																												%>
+<%																														%>
+<%	file - the path to the file that contains rdf data 																	%>
+<%			(only needed when type is file) 																			%>
+<%		Example Values:																									%>
+<%			<Param name="file">/absolute/path/to/rdf-data.rdf.xml</Param> - An absolute path to an rdf					%>
+<%				file on linux/unix/macosx operating systems																%>
+<%			<Param name="file">C:/absolute/path/to/rdf-data.n3</Param> - An absolute path to an rdf						%>
+<%				file on a windows operating system																		%>
+<%			<Param name="file">relative/path/to/rdf-data.ttl</Param> - A path to an rdf file that is					%>
+<%				relative to the folder the shell was in when this command was executed									%>
+<%	=== 																												%>
+<%																														%>
+<%	rdfLang - the format of the rdf in the file																			%>
+<%			(optional, only used when type is file) 																	%>
+<%		Possible Values:																								%>
+<%			(default) <Param name="rdfLang">RDF/XML</Param> - rdf/xml format											%>
+<%			<Param name="rdfLang">N3</Param> - n3 format																%>
+<%			<Param name="rdfLang">TTL</Param> - turtle/ttl format														%>
+<%			<Param name="rdfLang">N-TRIPLE</Param> - n-triple format													%>
+<%	=== 																												%>
+<%																														%>
+<%	dbLayout - the layout to use for an sdb model 																		%>
+<%			(optional, only used when type is sdb) 																		%>
+<%		Possible Values:																								%>
+<%			(default) <Param name="dbLayout">layout2</Param> - layout2													%>
+<%	=== 																												%>
+<%																														%>
+<%	dbType - the name of the database type (as specified by jena) 														%>
+<%			(only needed when type is rdb or sdb)																		%>
+<%		Examples: 																										%>
+<%			<Param name="dbType">MySQL</Param> - mysql database															%>
+<%			<Param name="dbType">H2</Param> - h2 database																%>
+<%	=== 																												%>
+<%																														%>
+<%	dbClass - the JDBC driver class to use 																				%>
+<%			(only needed when type is rdb or sdb)																		%>
+<%		Examples: 																										%>
+<%			<Param name="dbClass">com.mysql.jdbc.Driver</Param> - mysql database										%>
+<%			<Param name="dbClass">org.h2.Driver</Param> - h2 database													%>
+<%	=== 																												%>
+<%																														%>
+<%	dbUrl - the JDBC connection url 																					%>
+<%			(only needed when type is rdb or sdb)																		%>
+<%		Examples: 																										%>
+<%			<Param name="dbUrl">jdbc:mysql://127.0.0.1:3306/dbName</Param> - mysql database								%>
+<%				see http://dev.mysql.com/doc/refman/5.6/en/connector-j-reference-configuration-properties.html			%>
+<%			<Param name="dbUrl">jdbc:h2:path/to/h2/store</Param> - h2 database											%>
+<%				see http://www.h2database.com/html/features.html#database_url											%>
+<%	=== 																												%>
+<%																														%>
+<%	modelName - the named model to use																					%>
+<%			(optional, uses default model if not specified, only used when type is rdb, tdb, or sdb )					%>
+<%		Examples: 																										%>
+<%			<Param name="modelName">http://vitro.mannlib.cornell.edu/default/vitro-kb-2</Param>							%>
+<%			<Param name="modelName">mySimpleModelName</Param>															%>
+<%			<Param name="modelName">http://vivo.localinstitution.edu/models/my-uri-model</Param>						%>
+<%	=== 																												%>
+<%																														%>
+<%	dbUser - the DB username to use 																					%>
+<%			(only needed when type is rdb or sdb)																		%>
+<%		Example: 																										%>
+<%			<Param name="dbUser">sa</Param> - used for h2 database (the default h2 system admin login					%>
+<%			<Param name="dbUser">myUser</Param>																			%>
+<%	=== 																												%>
+<%																														%>
+<%	dbPass - the DB password to use 																					%>
+<%			(only needed when type is rdb or sdb)																		%>
+<%		Example: 																										%>
+<%			<Param name="dbPass"></Param> - used for h2 database (the default h2 system admin login						%>
+<%			<Param name="dbPass">myPass</Param>																			%>
+<%																														%>
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+-->
+<!--
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+<%	Sample tdb model																									%>
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+-->
+<!--
+	<Param name="type">tdb</Param>
+	<Param name="dbDir">data/tdb-jena-rh</Param>
+-->
+<!--
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+<%	Sample file model																									%>
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+-->
+<!--
+	<Param name="type">file</Param>
+	<Param name="file">data/file-jena-rh.rdf.n3</Param>
+	<Param name="rdfLang">N3</Param>
+-->
+<!--
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+<%	Sample rdb model																									%>
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+-->
+<!--
+	<Param name="type">rdb</Param>
+	<Param name="dbType">H2</Param>
+	<Param name="dbClass">org.h2.Driver</Param>
+	<Param name="dbUrl">jdbc:h2:data/jena-model/store</Param>
+	<Param name="modelName">mySimpleModelName</Param>
+	<Param name="dbUser">sa</Param>
+	<Param name="dbPass"></Param>
+-->
+<!--
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+<%	Sample sdb model																									%>
+<%	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	%>
+-->
+<!--
+	<Param name="type">sdb</Param>
+	<Param name="dbLayout">layout2</Param>
+	<Param name="dbType">H2</Param>
+	<Param name="dbClass">org.h2.Driver</Param>
+	<Param name="dbUrl">jdbc:h2:data/jena-model/store</Param>
+	<Param name="modelName">mySimpleModelName</Param>
+	<Param name="dbUser">sa</Param>
+	<Param name="dbPass"></Param>
+-->
+	<Param name="type">tdb</Param>
+	<Param name="dbDir">data/harvested-data/</Param>
+</Config>

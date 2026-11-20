@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2010-2011 VIVO Harvester Team. For full list of contributors, please see the AUTHORS file provided.
+  All rights reserved.
+  This program and the accompanying materials are made available under the terms of the new BSD license which accompanies this distribution, and is available at http://www.opensource.org/licenses/bsd-license.html
+-->
+<config>
+    # harvesting publications from TIB – Leibniz Information Centre for Science and Technology. exchange the ROR ID to test with your institution.
+    # OpenAlex requires a free API key to page past the first page with cursor=; get one at https://openalex.org/settings/api
+    <param name="file">https://api.openalex.org/works?filter=authorships.institutions.ror:https://ror.org/04aj4c181,from_publication_date:2018-01-01,to_publication_date:2020-12-31&amp;per-page=200&amp;api_key=YOUR_OPENALEX_API_KEY&amp;cursor=*&amp;mailto=you@example.com</param>
+
+    # harvesting of publications from the subfield "Semantic Web and Ontology Develoment", should result in ca. 9-10k publications
+<!--    <param name="file">https://api.openalex.org/works?page=1&filter=primary_topic.id:t10215,publication_year:2022-2024&amp;per-page=200&amp;cursor=*</param>-->
+
+    # harvesting of publications from the journal "Quantitative Science Studies".
+<!--    <param name="file">https://api.openalex.org/works?page=1&filter=primary_location.source.id:s4210195326&amp;per-page=200&amp;mailto=forschungsatlas@tib.eu&amp;cursor=*</param>-->
+
+    # FIDBAU
+<!--    <param name="file">https://api.openalex.org/works?filter=concepts.id:C10238366|C118416809|C119823426|C120991184|C122156500|C123657996|C124363303|C127416549|C147176958|C148803439|C154226666|C158049464|C158550234|C1631582|C173560066|C178432105|C190831278|C196316656|C203115093|C203299862|C205300905|C2775926657|C2776009117|C2776081408|C2776136241|C2776161637|C2776311590|C2776445639|C2776748203|C2776825979|C2777231864|C2777364373|C2777800518|C2777831296|C2778206487|C2778647717|C2778684775|C2778753569|C2778906150|C2779054714|C2779201158|C2779265402|C2779331490|C2779635184|C2780021121|C2780113678|C2780344732|C2780886216|C2780933643|C2781052401,authorships.institutions.country_code:de&amp;per-page=200&amp;mailto=forschungsatlas@tib.eu&amp;cursor=*</param>-->
+
+    <param name="output">../common/translation/raw-records.config.xml</param>
+    <param name="namespaceBase">http://vivo.example.com/harvest/aims_users/</param>
+    <param name="description">publication</param>
+    <param name="id">uid</param>
+    <param name="path">$.results</param>
+    <Param name="wordiness">INFO</Param>
+</config>
+

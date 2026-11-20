@@ -15,6 +15,8 @@ import java.io.OutputStream;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import javax.xml.transform.Source;
+import javax.xml.transform.Templates;
+import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -45,6 +47,10 @@ public class XSLTranslator {
 	 * The translation xsl is the map that will reconstruct our input stream's document into the appropriate format
 	 */
 	private String translationString;
+	/**
+	 * the translation xsl, compiled once and reused for every record
+	 */
+	private Templates translationTemplates;
 	/**
 	 * record handler for incoming records
 	 */
@@ -130,6 +136,8 @@ public class XSLTranslator {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		IOUtils.copy(transFileStream, baos);
 		this.translationString = baos.toString();
+		// the stylesheet changed, so any previously compiled form is stale
+		this.translationTemplates = null;
 	}
 	
 	/**
@@ -156,8 +164,7 @@ public class XSLTranslator {
 				log.trace("Translating Record " + r.getID());
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				recordData = (this.cleanXML) ? URLDecoder.decode(r.getData(), "UTF-8") : r.getData();
-				xmlTranslate(new ByteArrayInputStream(recordData.getBytes(StandardCharsets.UTF_8)), baos, new ByteArrayInputStream(this.translationString.getBytes(
-                    StandardCharsets.UTF_8)));
+				xmlTranslate(new ByteArrayInputStream(recordData.getBytes(StandardCharsets.UTF_8)), baos);
 				this.outStore.addRecord(r.getID(), baos.toString("UTF-8"), this.getClass());
 				r.setProcessed(this.getClass());
 				baos.close();
@@ -169,6 +176,42 @@ public class XSLTranslator {
 		}
 		log.info(Integer.toString(translated) + " records translated.");
 		log.info(Integer.toString(passed) + " records did not need translation");
+	}
+	
+	/**
+	 * Get the compiled form of the translation xsl, compiling it on first use
+	 * @return the compiled stylesheet
+	 * @throws IOException error compiling the stylesheet
+	 */
+	private Templates getTranslationTemplates() throws IOException {
+		if(this.translationTemplates == null) {
+			Source xslSource = new StreamSource(new ByteArrayInputStream(this.translationString.getBytes(StandardCharsets.UTF_8)));
+			try {
+				// compile once: recompiling per record dominates both runtime and heap on large harvests
+				this.translationTemplates = TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null).newTemplates(xslSource);
+			} catch(TransformerConfigurationException e) {
+				throw new IOException(e);
+			}
+		}
+		return this.translationTemplates;
+	}
+	
+	/**
+	 * translate a single record using this translator's compiled stylesheet
+	 * @param inStream the input stream
+	 * @param outStream the output stream
+	 * @throws IOException error translating
+	 */
+	private void xmlTranslate(InputStream inStream, OutputStream outStream) throws IOException {
+		try {
+			Transformer transformer = getTranslationTemplates().newTransformer();
+			transformer.transform(new StreamSource(inStream), new StreamResult(outStream));
+		} catch(TransformerConfigurationException e) {
+			throw new IOException(e);
+		} catch(TransformerException e) {
+			throw new IOException(e);
+		}
+		outStream.flush();
 	}
 	
 	/**
